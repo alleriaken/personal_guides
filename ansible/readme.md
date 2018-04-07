@@ -1,7 +1,7 @@
 # Update computer
-`sudo apt-get update
+```sudo apt-get update
 sudo apt-get upgrade
-sudo apt-get install software-properties-common`
+sudo apt-get install software-properties-common```
 
 # Add ansible ppa
 `sudo apt-add-repository ppa:ansible/ansible`
