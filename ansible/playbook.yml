@@ -1,0 +1,27 @@
+---
+- hosts: tipemeservers
+  tasks:
+          - name: Update code from git
+            git: 
+                repo: git@bitbucket.org:developerbrisbane/tipeme-web.git
+                version: staging
+                dest: /var/www/tipeme_staging
+                update: yes
+            become: yes
+            become_user: builder
+          - name: Update composer
+            composer:
+                    command: update
+                    working_dir: /var/www/tipeme_staging
+          - name: Restart apache
+            service: name=apache2 state=restarted
+          - name: Database Migration
+            command: vendor/bin/phinx migrate -e development
+            args:
+                    chdir: /var/www/tipeme_staging
+          - name: Restart nodejs
+            become: yes
+            become_user: root
+            command: pm2 restart /var/www/tipeme_staging/nodejs/main.js
+            args:
+                    chdir: /var/www/tipeme_staging/nodejs/
